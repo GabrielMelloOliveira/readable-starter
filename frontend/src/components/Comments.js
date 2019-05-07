@@ -13,6 +13,7 @@ import {
     handleVoteScoreComment,
     handleEditComment
 } from '../actions/comments'
+import { handleInitialData } from '../actions/shared'
 import uuidv1 from 'uuid/v1'
 
 class Comments extends Component {
@@ -103,11 +104,13 @@ class Comments extends Component {
                 } 
 
                 dispatch(handleAddComment(comment)).then((item) => {
-                    this.props.dispatch(handleGetComments(this.props.id)).then(comments => {
-                        this.setState({ 
-                            comments,
-                            body: '',
-                            show: false
+                    this.props.dispatch(handleInitialData()).then(_ => {
+                        this.props.dispatch(handleGetComments(this.props.id)).then(comments => {
+                            this.setState({ 
+                                comments,
+                                body: '',
+                                show: false
+                            })
                         })
                     })
                 })
@@ -121,9 +124,11 @@ class Comments extends Component {
         const { dispatch } = this.props
 
         dispatch(handleDeleteComment(commentId)).then((item) => {
-            this.props.dispatch(handleGetComments(this.props.id)).then(comments => {
-                this.setState({ 
-                    comments
+            this.props.dispatch(handleInitialData()).then(_ => {
+                this.props.dispatch(handleGetComments(this.props.id)).then(comments => {
+                    this.setState({ 
+                        comments
+                    })
                 })
             })
         })

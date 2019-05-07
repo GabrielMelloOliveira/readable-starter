@@ -6,9 +6,11 @@ import {
     voteScoreComment,
     editComment 
 } from '../utils/api'
+import { DELETE_POST } from './posts';
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
 
 export function receiveComments (comments) {
     return {
@@ -53,11 +55,19 @@ export function handleAddComment (comment) {
     }
 }
 
+export function removeComment (comment) {
+    return {
+        type: DELETE_COMMENT,
+        comment
+    }
+}
+
 export function handleDeleteComment (commentId) {
     return (dispatch) => {
         dispatch(showLoading())
 
         return deleteComment(commentId)
+        .then((comment) => dispatch(removeComment(comment)))
         .then(() => dispatch(hideLoading()))
     }
 }

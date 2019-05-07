@@ -11,7 +11,17 @@ export function _getCategories () {
 export function _getPosts () {
     return fetch(`${URL_BASE}/posts`, HEADER)
         .then(response => response.json())
-        .then(data => data)
+        .then(data => {
+            
+            let newPosts = []
+            let posts = data != null ? Object.values(data) : []
+
+            posts.forEach(post => {
+                newPosts[post.id] = post
+            })
+
+            return newPosts
+        })
 }
 
 export function _getPost (postId) {

@@ -29,13 +29,13 @@ class Post extends Component {
         }
 
         const {
-            id, timestamp, voteScore, title, commentCount
+            id, author, timestamp, voteScore, title, commentCount, category
         } = post
 
         return (
             <ListGroup.Item key={id} action>
-                <Link to={`/post/details/${id}`}>
-                    {formattingDate(timestamp)} - {title} {selectBadgeByVoteScore(voteScore)} - Comments: {commentCount}
+                <Link to={`/${category}/${id}`}>
+                    {formattingDate(timestamp)} - {title} {selectBadgeByVoteScore(voteScore)} - Author: {author} - Comments: {commentCount}
                 </Link>
                 <Button variant="warning" type="submit" className="float-right" onClick={() => this.handlerVoteScorePost(id, "downVote")}>
                     Vote -

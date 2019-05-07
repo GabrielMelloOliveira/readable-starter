@@ -62,6 +62,10 @@ export function deletePost (postId) {
 export function editComment (comment) {
     return _editComment(comment)
 }
+
+export function getPosts () {
+    return _getPosts()
+}
   
 //   export function saveComments (info) {
 //     return _saveComments(info)

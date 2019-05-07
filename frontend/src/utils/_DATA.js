@@ -105,6 +105,8 @@ export function _deletePost(postId) {
             'Content-Type': 'application/json' 
         }
     })
+    .then(response => response.json())
+    .then(data => data)
 }
 
 export function _editComment(comment) {

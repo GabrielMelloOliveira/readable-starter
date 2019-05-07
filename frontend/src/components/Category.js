@@ -78,11 +78,11 @@ class Category extends Component {
                                 </ListGroup.Item>
                                 { this.props.categories.map((category) => {
                                     if (this.props.category === category.name)
-                                        return (<ListGroup.Item action href={`/categories/${category.name}`} active>
+                                        return (<ListGroup.Item action href={`/${category.name}`} active>
                                                     {category.name}
                                                 </ListGroup.Item>)
                                     else
-                                        return (<ListGroup.Item action href={`/categories/${category.name}`}>
+                                        return (<ListGroup.Item action href={`/${category.name}`}>
                                                     {category.name}
                                                 </ListGroup.Item>)
                                 })}

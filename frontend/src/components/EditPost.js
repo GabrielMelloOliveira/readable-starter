@@ -69,7 +69,7 @@ class EditPost extends Component {
     render() {
 
         if (this.state.toBack === true) {
-            return <Redirect to={`/post/details/${this.props.post.id}`} />
+            return <Redirect to={`/${this.props.post.category}/${this.props.post.id}`} />
         }
 
         return (

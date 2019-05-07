@@ -76,7 +76,7 @@ class Dashboard extends Component {
                                     All categories
                                 </ListGroup.Item>
                                 { this.props.categories.map((category) => (
-                                    <ListGroup.Item key={category.name} action href={`/categories/${category.name}`}>{category.name}</ListGroup.Item>
+                                    <ListGroup.Item key={category.name} action href={`/${category.name}`}>{category.name}</ListGroup.Item>
                                 ))}
                             </ListGroup>
                         </Col>

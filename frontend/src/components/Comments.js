@@ -47,7 +47,7 @@ class Comments extends Component {
         if (this.state.showCommentId === comment.id) {
             this.setState({ showCommentId: 0, bodyEdited: '', commentEdit: null })
         } else {
-            this.setState({ showCommentId: comment.id, bodyEdited: comment.body, commentEdit: null })
+            this.setState({ showCommentId: comment.id, bodyEdited: comment.body, commentEdit: comment })
         }
     }
 
@@ -67,11 +67,15 @@ class Comments extends Component {
     handleShowComment = () => {
         console.log('Editando comentário', this.state.bodyEdited)
 
+        console.log('Editando', this.state.commentEdit)
+
         if (this.state.commentEdit != null) {
 
             const { dispatch } = this.props
-            
-            dispatch(handleEditComment(this.state.commentEdit)).then(item => {
+            let comment = this.state.commentEdit
+            comment.body = this.state.bodyEdited
+
+            dispatch(handleEditComment(comment)).then(item => {
                 this.props.dispatch(handleGetComments(this.props.id)).then(comments => {
                     this.setState({ 
                         showCommentId: 0, 

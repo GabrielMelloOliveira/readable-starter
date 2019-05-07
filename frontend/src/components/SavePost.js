@@ -11,8 +11,9 @@ class SavePost extends Component {
     state = {
         title: '',
         body: '',
-        category: '',
-        toBack: false
+        category: 'react',
+        toBack: false,
+        alert: false
     }
 
     handleChangeTitle = (e) => {
@@ -45,22 +46,29 @@ class SavePost extends Component {
 
         const { title, body, category } = this.state
         const { dispatch } = this.props
-        
-        let post = { 
-            title, 
-            body, 
-            category,
-            id: uuidv1()
-        } 
 
-        dispatch(handleAddPost(post))
+        if (title !== '' && body !== '' && category !== '') {
 
-        this.setState(() => ({
-            title: '',
-            body: '',
-            category: '',
-            toBack: true
-        }))
+            let post = { 
+                title, 
+                body, 
+                category,
+                id: uuidv1()
+            } 
+
+            dispatch(handleAddPost(post))
+
+            this.setState(() => ({
+                title: '',
+                body: '',
+                category: '',
+                toBack: true
+            }))
+        } else {
+            this.setState(() => ({
+                alert: true
+            }))
+        }
     }
 
     handleBack = () => {
@@ -82,19 +90,19 @@ class SavePost extends Component {
                     <Form>
                         <Form.Group controlId="formTitle">
                             <Form.Label>Title</Form.Label>
-                            <Form.Control onChange={this.handleChangeTitle} type="text" placeholder="Enter a title" />
+                            <Form.Control onChange={this.handleChangeTitle} value={this.state.title} type="text" placeholder="Enter a title" />
                         </Form.Group>
 
                         <Form.Group controlId="formBody">
                             <Form.Label>Content</Form.Label>
-                            <Form.Control onChange={this.handleChangeBody} as="textarea" rows="3" placeholder="Enter a content" />
+                            <Form.Control onChange={this.handleChangeBody} value={this.state.body} as="textarea" rows="3" placeholder="Enter a content" />
                         </Form.Group>
 
                         <Form.Group controlId="formCategory">
                             <Form.Label>Category</Form.Label>
-                            <Form.Control onChange={this.handleChangeCategory} as="select">
+                            <Form.Control onChange={this.handleChangeCategory} value={this.state.category} as="select">
                                 { this.props.categories.map((category) => (
-                                    <option>{category.name}</option>
+                                    <option key={category.name}>{category.name}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -105,6 +113,10 @@ class SavePost extends Component {
                         <Button variant="danger" type="submit" onClick={this.handleBack}>
                             Back
                         </Button>
+
+                        { 
+                            this.state.alert ? <label style={{ marginLeft: 10, color: 'red' }}>Please fill all fields</label> : ''
+                        }
                     </Form>
                 </Container>
             </Fragment>

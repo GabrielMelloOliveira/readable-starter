@@ -6,7 +6,7 @@ import {
     formattingDate, 
     selectBadgeByVoteScore 
 } from '../utils/helpers'
-import { handleDeletePost } from '../actions/posts'
+import { handleDeletePost, handleGetPosts } from '../actions/posts'
 import Header from './Header'
 import Comments from './Comments'
 
@@ -20,7 +20,7 @@ class DetailsPost extends Component {
     handlerDeletePost = (postId) => {
         const { dispatch } = this.props
 
-        dispatch(handleDeletePost(postId)).then((item) => {
+        dispatch(handleDeletePost(postId)).then(_ => {
             this.setState({ 
                 toHome: true,
                 toEdit: false
@@ -35,11 +35,27 @@ class DetailsPost extends Component {
         })
     }
 
+    handleBackToHome = () => {
+        this.setState({ 
+            toHome: true,
+            toEdit: false
+        })
+    }
+
     render() {
+
+        if (this.props.post === null || this.props.post === undefined) {
+            return <Fragment>
+                <Header /> 
+                <Container style={{ marginTop: 50, textAlign: 'center' }}>
+                    <h1 style={{ textAlign: 'center' }}>Post not found</h1>
+                </Container>
+            </Fragment>
+        }
 
         const { 
             id, title, body, author,
-            timestamp, voteScore
+            timestamp, voteScore, commentCount
         } = this.props.post
 
         if (this.state.toHome === true && this.state.toEdit === false) {
@@ -56,11 +72,15 @@ class DetailsPost extends Component {
                         <h2>{title} {selectBadgeByVoteScore(voteScore)}</h2>
                         <p style={{ marginBottom: '1.25rem', color: '#999' }}>Author: {author} - {formattingDate(timestamp)}</p>
                         <p>{body}</p>
+                        <p>Comment Count: {commentCount}</p>
                         <Button variant="primary" type="submit" style={{ marginRight: 10 }} onClick={this.handlerEditPost}>
                             Edit Post
                         </Button>
                         <Button variant="danger" type="submit" onClick={() => this.handlerDeletePost(id)}>
                             Delete Post
+                        </Button>
+                        <Button variant="dark" className="float-right" type="submit" onClick={() => this.handleBackToHome()}>
+                            Back to Home
                         </Button>
                     </div>
                     <Comments id={id} />
@@ -71,10 +91,21 @@ class DetailsPost extends Component {
 }
 
 function mapStateToProps ({ categories, posts }, props) {
-    const { id } = props.match.params
+    const { category, post_id } = props.match.params
 
-    let newPosts = posts != null ? Object.values(posts) : []
-    let post = newPosts.filter(item => item.id === id)[0]
+    let newPosts;
+    let post;
+
+    if (posts != null) {
+        newPosts = posts != null ? Object.values(posts) : []
+        post = newPosts.filter(item => item.id === post_id && item.category === category)[0]
+    } else {
+        handleGetPosts().then(items => {
+            posts = items
+            newPosts = posts != null ? Object.values(posts) : []
+            post = newPosts.filter(item => item.id === post_id && item.category === category)[0]
+        })
+    }
 
     return {
         categories: Object.values(categories),

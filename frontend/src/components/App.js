@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { handleInitialData } from '../actions/shared'
 import Dashboard from './Dashboard'
@@ -23,13 +23,13 @@ class App extends Component {
 						{
 							this.props.loading === true
 								? null
-								: <div>
-									<Route path='/' exact component={Dashboard} />
-									<Route path='/post' exact component={SavePost} />
+								: <Switch>
 									<Route path='/post/:id' exact component={EditPost} />
-									<Route path='/post/details/:id' exact component={DetailsPost} />
-									<Route path='/categories/:category' exact component={Category} />
-								</div>
+									<Route path='/post' exact component={SavePost} />
+									<Route path='/:category/:post_id' exact component={DetailsPost} />
+									<Route path='/:category' exact component={Category} />
+									<Route path='/' exact component={Dashboard} />
+								</Switch>
 						}
 					</div>
 				</Fragment>
